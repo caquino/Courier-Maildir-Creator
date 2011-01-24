@@ -1,0 +1,58 @@
+#! /bin/sh
+# $Id: imapd.rc.in,v 1.31 2005/07/02 01:13:56 mrsam Exp $
+#
+# Copyright 1998 - 2005 Double Precision, Inc.
+# See COPYING for distribution information.
+
+
+prefix=/usr/local
+exec_prefix=/usr/local
+bindir=${exec_prefix}/bin
+libexecdir=/usr/local/libexec/courier-imap
+
+if test ! -f /usr/local/etc/courier-imap/imapd
+then
+	echo "/usr/local/etc/courier-imap/imapd does not exist, forgot make install-configure?"
+	exit 1
+fi
+
+if test ! -f /usr/local/etc/courier-imap/imapd-ssl
+then
+	echo "/usr/local/etc/courier-imap/imapd-ssl does not exist, forgot make install-configure?"
+	exit 1
+fi
+
+TLS_CACHEFILE=""
+. /usr/local/etc/courier-imap/imapd-ssl
+. /usr/local/etc/courier-imap/imapd
+
+case $1 in
+start)
+	if test "$TLS_CACHEFILE" != ""
+	then
+		rm -f $TLS_CACHEFILE
+	fi
+
+	umask $IMAP_UMASK
+	ulimit -v $IMAP_ULIMITD
+	/usr/bin/env -i /bin/sh -c " set -a ;
+			prefix=/usr/local ;
+			exec_prefix=/usr/local ;
+			bindir=${exec_prefix}/bin ;
+			libexecdir=/usr/local/libexec/courier-imap ;
+				. /usr/local/etc/courier-imap/imapd ; \
+				. /usr/local/etc/courier-imap/imapd-ssl ; \
+		IMAP_STARTTLS=$IMAPDSTARTTLS ; \
+		PROXY_HOSTNAME=$PROXY_HOSTNAME ; \
+		TLS_PROTOCOL=$TLS_STARTTLS_PROTOCOL ; \
+		/usr/local/sbin/courierlogger -pid=$PIDFILE -start $LOGGEROPTS \
+		/usr/local/libexec/courier-imap/couriertcpd -address=$ADDRESS \
+			-maxprocs=$MAXDAEMONS -maxperip=$MAXPERIP \
+			$TCPDOPTS \
+			$PORT /interdotnet/modules/imaplogin-wrapper ${exec_prefix}/bin/imapd ${MAILDIRPATH}"
+	;;
+stop)
+	/usr/local/sbin/courierlogger -pid=$PIDFILE -stop
+	;;
+esac
+exit 0

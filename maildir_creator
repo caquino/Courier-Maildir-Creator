@@ -1,0 +1,29 @@
+#!/bin/sh
+#
+# modify environment settings here....
+#
+export PATH=/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin
+if [ "$(echo $@ | grep Maildir)" = "" ]
+then
+	[ -d $@/Maildir ] || mkdir -p $@/Maildir
+	[ -d $@/Maildir/cur ] || mkdir -p $@/Maildir/cur
+	[ -d $@/Maildir/new ] || mkdir -p $@/Maildir/new
+	[ -d $@/Maildir/tmp ] || mkdir -p $@/Maildir/tmp
+	[ -d $@/Maildir/.Spam ] ||  maildirmake $@/Maildir/.Spam
+	[ -d $@/Maildir/.Is\ Spam ] ||  maildirmake $@/Maildir/.Is\ Spam
+	[ -d $@/Maildir/.No\ Spam ] ||  maildirmake $@/Maildir/.No\ Spam
+	[ -d $@/Maildir/.Trash ] ||  maildirmake $@/Maildir/.Trash
+	[ -d $@/Maildir/.Sent\ Items ] ||  maildirmake $@/Maildir/.Sent\ Items
+	if [ ! -f $@/Maildir/courierimapsubscribed ]
+	then
+	cat << _EOF_ >$@/Maildir/courierimapsubscribed
+INBOX.Trash
+INBOX.Sent Items
+INBOX.Spam
+INBOX.Trash
+INBOX.Sent Items
+INBOX.No Spam
+INBOX.Is Spam
+_EOF_
+	fi
+fi

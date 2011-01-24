@@ -1,0 +1,3 @@
+On demand Maildir creation for courier-{imap,pop}
+
+Version tested under FreeBSD, may works in any linux with small modification.

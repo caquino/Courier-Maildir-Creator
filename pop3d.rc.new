@@ -1,0 +1,52 @@
+#! /bin/sh
+# $Id: pop3d.rc.in,v 1.16 2005/07/02 01:13:56 mrsam Exp $
+#
+# Copyright 1998 - 2005 Double Precision, Inc.
+# See COPYING for distribution information.
+
+
+prefix=/usr/local
+exec_prefix=/usr/local
+bindir=${exec_prefix}/bin
+libexecdir=/usr/local/libexec/courier-imap
+
+if test ! -f /usr/local/etc/courier-imap/pop3d
+then
+	echo "/usr/local/etc/courier-imap/pop3d does not exist, forgot make install-configure?"
+	exit 1
+fi
+
+if test ! -f /usr/local/etc/courier-imap/pop3d-ssl
+then
+	echo "/usr/local/etc/courier-imap/pop3d-ssl does not exist, forgot make install-configure?"
+	exit 1
+fi
+
+. /usr/local/etc/courier-imap/pop3d-ssl
+. /usr/local/etc/courier-imap/pop3d
+
+case $1 in
+start)
+	/usr/bin/env -i /bin/sh -c " set -a ;
+		prefix=/usr/local ;
+		exec_prefix=/usr/local ;
+		bindir=${exec_prefix}/bin ;
+		libexecdir=/usr/local/libexec/courier-imap ;
+		. /usr/local/etc/courier-imap/pop3d ; \
+		. /usr/local/etc/courier-imap/pop3d-ssl ; \
+		PROXY_HOSTNAME=$PROXY_HOSTNAME ; \
+		TLS_PROTOCOL=$TLS_STARTTLS_PROTOCOL ; \
+		/usr/local/sbin/courierlogger -pid=$PIDFILE -start $LOGGEROPTS \
+		/usr/local/libexec/courier-imap/couriertcpd -address=$ADDRESS \
+			-maxprocs=$MAXDAEMONS -maxperip=$MAXPERIP \
+			$TCPDOPTS \
+                        $PORT /interdotnet/modules/pop3login-wrapper ${exec_prefix}/bin/pop3d ${MAILDIRPATH}"
+
+#			$PORT ${exec_prefix}/sbin/pop3login \
+#				${exec_prefix}/bin/pop3d ${MAILDIRPATH}"
+	;;
+stop)
+	/usr/local/sbin/courierlogger -pid=$PIDFILE -stop
+	;;
+esac
+exit 0
