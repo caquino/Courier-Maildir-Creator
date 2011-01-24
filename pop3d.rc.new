@@ -40,7 +40,7 @@ start)
 		/usr/local/libexec/courier-imap/couriertcpd -address=$ADDRESS \
 			-maxprocs=$MAXDAEMONS -maxperip=$MAXPERIP \
 			$TCPDOPTS \
-                        $PORT /interdotnet/modules/pop3login-wrapper ${exec_prefix}/bin/pop3d ${MAILDIRPATH}"
+                        $PORT /path/to/pop3login-wrapper ${exec_prefix}/bin/pop3d ${MAILDIRPATH}"
 
 #			$PORT ${exec_prefix}/sbin/pop3login \
 #				${exec_prefix}/bin/pop3d ${MAILDIRPATH}"

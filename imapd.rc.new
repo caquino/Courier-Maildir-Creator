@@ -49,7 +49,7 @@ start)
 		/usr/local/libexec/courier-imap/couriertcpd -address=$ADDRESS \
 			-maxprocs=$MAXDAEMONS -maxperip=$MAXPERIP \
 			$TCPDOPTS \
-			$PORT /interdotnet/modules/imaplogin-wrapper ${exec_prefix}/bin/imapd ${MAILDIRPATH}"
+			$PORT /path/to/imaplogin-wrapper ${exec_prefix}/bin/imapd ${MAILDIRPATH}"
 	;;
 stop)
 	/usr/local/sbin/courierlogger -pid=$PIDFILE -stop

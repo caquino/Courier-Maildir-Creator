@@ -1,2 +1,2 @@
 #!/bin/sh
-LD_PRELOAD=/interdotnet/modules/creator.so /usr/local/sbin/pop3login /usr/local/bin/pop3d Maildir
+LD_PRELOAD=/path/to/creator.so /usr/local/sbin/pop3login /usr/local/bin/pop3d Maildir

@@ -1,2 +1,2 @@
 #!/bin/sh
-LD_PRELOAD=/interdotnet/modules/creator.so /usr/local/sbin/imaplogin /usr/local/bin/imapd Maildir
+LD_PRELOAD=/path/to/creator.so /usr/local/sbin/imaplogin /usr/local/bin/imapd Maildir
